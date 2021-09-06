@@ -1,5 +1,5 @@
 import React, { useEffect, useState} from 'react';
-import { Link } from '@reach/router';
+import { Link, navigate } from '@reach/router';
 import './home.css';
 
 const Home = () => {
@@ -16,13 +16,13 @@ const Home = () => {
             .then(
                 response => {
                     console.log(response);
-                    setState(response.data)
+                    setState(response)
                 },
                 err => { 
                     console.log(err)
                 }
             )
-    },[state])
+    },[])
     return (
         <div className="container">
             <h1>Chocolate City</h1>
@@ -35,11 +35,12 @@ const Home = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td></td>
-                        <td><button className="view-albums"><Link to="/albums">View Albums</Link></button></td>
+                {state && state.map( response =>
+                    <tr key={response.id}>
+                        <td>{response.name}</td>
+                        <td><button className="view-albums"  onClick={() => navigate('/albums', {state: response.id})}>View Albums</button></td>
                         <td><button className="view-tweets"><Link to="/tweets">View Tweets</Link></button></td>
-                    </tr>
+                    </tr>)}
                 </tbody>
             </table>
         </div>
